@@ -2,7 +2,7 @@
 exports.getProfile = async (req, res, next) => {
   try {
     // 处理请求
-    res.send("get /profile/:username");
+    res.send("get /profiles/:username");
   } catch (err) {
     next(err);
   }
