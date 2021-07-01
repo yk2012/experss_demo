@@ -1,5 +1,7 @@
 const express = require("express");
 const articleCtrl = require("../controller/article");
+const auth = require("../middleware/auth");
+const articleValidator = require("../validator/article");
 
 const router = express.Router();
 
@@ -7,33 +9,38 @@ const router = express.Router();
 router.get("/", articleCtrl.listArticles);
 
 // Feed Articles
-router.get("/feed", articleCtrl.feedArticles);
+router.get("/feed", auth, articleCtrl.feedArticles);
 
 // Get Article
-router.get("/:slug", articleCtrl.getArticle);
+router.get("/:articleId", articleValidator.getArticle, articleCtrl.getArticle);
 
-// Create Article
-router.post("/", articleCtrl.createArticle);
+// Create Article 创建文章
+router.post(
+  "/",
+  auth,
+  articleValidator.createArticle,
+  articleCtrl.createArticle
+);
 
 // Update Article
-router.put("/:slug", articleCtrl.updateArticle);
+router.put("/:articleId", auth, articleCtrl.updateArticle);
 
 // Delete Article
-router.delete("/:slug", articleCtrl.deleteArticle);
+router.delete("/:articleId", auth, articleCtrl.deleteArticle);
 
 // Add Comments to an Article
-router.post("/:slug/comments", articleCtrl.addComments);
+router.post("/:articleId/comments", auth, articleCtrl.addComments);
 
 // Get Comments from an Article
-router.get("/:slug/comments", articleCtrl.getComments);
+router.get("/:articleId/comments", articleCtrl.getComments);
 
 // Delete Comment
-router.delete("/:slug/comments/:id", articleCtrl.deleteComment);
+router.delete("/:articleId/comments/:id", auth, articleCtrl.deleteComment);
 
 // Favorite Article
-router.post("/:slug/favorite", articleCtrl.favoriteArticle);
+router.post("/:articleId/favorite", auth, articleCtrl.favoriteArticle);
 
 // Unfavorite Article
-router.delete("/:slug/favorite", articleCtrl.unfavoriteArticle);
+router.delete("/:articleId/favorite", auth, articleCtrl.unfavoriteArticle);
 
 module.exports = router;

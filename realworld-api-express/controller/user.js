@@ -13,7 +13,11 @@ exports.login = async (req, res, next) => {
       {
         userId: user._id,
       },
-      jwtSecret
+      // 设置token过期时间，单位为秒
+      jwtSecret,
+      {
+        expiresIn: 60 * 60 * 24,
+      }
     );
     // 移除密码属性
     delete user.password;
@@ -49,7 +53,9 @@ exports.register = async (req, res, next) => {
 exports.getCurrentUser = async (req, res, next) => {
   try {
     // 处理请求
-    res.send("get /user");
+    res.status(200).json({
+      user: req.user,
+    });
   } catch (err) {
     next(err);
   }

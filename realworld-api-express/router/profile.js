@@ -1,5 +1,6 @@
 const express = require("express");
 const profileCtrl = require("../controller/profile");
+const auth = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -7,9 +8,9 @@ const router = express.Router();
 router.get("/:username", profileCtrl.getProfile);
 
 // Follow user 关注用户
-router.post("/:username/follow", profileCtrl.followUser);
+router.post("/:username/follow", auth, profileCtrl.followUser);
 
 // Unfollow user 取消关注用户
-router.delete("/:username/follow", profileCtrl.unfollowUser);
+router.delete("/:username/follow", auth, profileCtrl.unfollowUser);
 
 module.exports = router;

@@ -1,3 +1,5 @@
+const { Article } = require("../model");
+
 // List Articles
 exports.listArticles = async (req, res, next) => {
   try {
@@ -22,7 +24,13 @@ exports.feedArticles = async (req, res, next) => {
 exports.getArticle = async (req, res, next) => {
   try {
     // 处理请求
-    res.send("get /articles/:slug");
+    const article = await Article.findById(req.params.articleId).populate("author");
+    if (!article) {
+      return res.status(404).end();
+    }
+    res.status(200).json({
+      article,
+    });
   } catch (err) {
     next(err);
   }
@@ -32,7 +40,13 @@ exports.getArticle = async (req, res, next) => {
 exports.createArticle = async (req, res, next) => {
   try {
     // 处理请求
-    res.send("post /articles");
+    const article = new Article(req.body.article);
+    article.author = req.user._id;
+    article.populate("author").execPopulate();
+    await article.save();
+    res.status(201).json({
+      article,
+    });
   } catch (err) {
     next(err);
   }
