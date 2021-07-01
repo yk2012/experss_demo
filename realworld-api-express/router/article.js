@@ -23,10 +23,20 @@ router.post(
 );
 
 // Update Article
-router.put("/:articleId", auth, articleCtrl.updateArticle);
+router.put(
+  "/:articleId",
+  auth,
+  articleValidator.updateArticle,
+  articleCtrl.updateArticle
+);
 
 // Delete Article
-router.delete("/:articleId", auth, articleCtrl.deleteArticle);
+router.delete(
+  "/:articleId",
+  auth,
+  articleValidator.deleteArticle,
+  articleCtrl.deleteArticle
+);
 
 // Add Comments to an Article
 router.post("/:articleId/comments", auth, articleCtrl.addComments);
